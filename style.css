@@ -32,10 +32,11 @@ body {
     overflow-y: auto;
 }
 
+/* Hide overall container scrollbar */
 .container::-webkit-scrollbar { display: none; }
 
 .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
-input { flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(255, 255, 255, 0.15); color: white; }
+input { flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(255, 255, 255, 0.15); color: white; outline: none; }
 button { padding: 0 15px; background: #fff; color: #1e3c72; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
 .temp-display { font-size: 5rem; font-weight: 200; margin: 10px 0; }
@@ -51,16 +52,33 @@ button { padding: 0 15px; background: #fff; color: #1e3c72; border: none; border
 
 h4, h3 { font-size: 0.75rem; margin: 0 0 10px 0; opacity: 0.6; text-transform: uppercase; }
 
-#hourly-container, #forecast-container { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 5px; }
+/* The Horizontal Scroll Containers */
+#hourly-container, #forecast-container { 
+    display: flex; 
+    overflow-x: auto; 
+    gap: 18px; 
+    padding-bottom: 8px; 
+    scroll-behavior: smooth;
+}
+
+/* Hide horizontal scrollbars for clean iOS look */
 #hourly-container::-webkit-scrollbar, #forecast-container::-webkit-scrollbar { display: none; }
 
-.item-box { text-align: center; min-width: 60px; }
-.item-box p { margin: 5px 0; font-size: 0.8rem; }
+.item-box { 
+    text-align: center; 
+    min-width: 55px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.item-box p { margin: 4px 0; font-size: 0.85rem; }
+.item-box img { width: 45px; height: 45px; margin: 2px 0; }
 
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 .stat-card { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 15px; }
 
-/* Activity List Styling with Scroll */
+/* Activity List Styling */
 #activities-list {
     max-height: 140px;
     overflow-y: auto;
