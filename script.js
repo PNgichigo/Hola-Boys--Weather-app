@@ -23,7 +23,6 @@ function getWeather() {
             document.getElementById("wind-speed").innerText = data.wind.speed;
 
             let rainAmt = data.rain ? data.rain['1h'] : 0;
-            // Pass temp, rain, and wind to the new guide function
             updateGuide(data.main.temp, rainAmt, data.wind.speed);
         });
 
@@ -39,13 +38,21 @@ function getWeather() {
 function renderHourly(list) {
     const container = document.getElementById("hourly-container");
     container.innerHTML = "";
-    for (let i = 0; i < 4; i++) {
+    
+    // Grabs the next 8 available forecast slots (24 hours)
+    for (let i = 0; i < 8; i++) {
         const item = list[i];
-        const time = new Date(item.dt * 1000).getHours() + ":00";
+        
+        // Formats time to strictly 24-hour style (e.g., 12:00, 15:00)
+        let dateObj = new Date(item.dt * 1000);
+        let hours = dateObj.getHours().toString().padStart(2, '0');
+        let timeString = `${hours}:00`;
+
+        // Layout: Time on top, Icon in middle, Temp at bottom
         container.innerHTML += `
             <div class="item-box">
-                <p>${time}</p>
-                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" width="30">
+                <p>${timeString}</p>
+                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png" alt="weather icon">
                 <p><b>${Math.round(item.main.temp)}°</b></p>
             </div>`;
     }
@@ -54,13 +61,14 @@ function renderHourly(list) {
 function renderDaily(list) {
     const container = document.getElementById("forecast-container");
     container.innerHTML = "";
+    
     for (let i = 8; i < list.length; i += 8) {
         const item = list[i];
         const date = new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' });
         container.innerHTML += `
             <div class="item-box">
                 <p>${date}</p>
-                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" width="30">
+                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png" alt="weather icon">
                 <p><b>${Math.round(item.main.temp)}°</b></p>
             </div>`;
     }
