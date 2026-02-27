@@ -3,61 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-   <link rel="stylesheet" href="style.css">
+    <title>Weather App | Hola Boys</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="loading-screen">
         <h1>A product of Omar Madhunde and Hamisi Ali</h1>
         <p>HOLA BOYS SCHOOL</p>
-<p> <B>Ngangania KileleL</B></p>
+        <p><b>Ngangania Kilele</b></p>
     </div>
 
+    <div class="clouds"></div>
+    <div id="rain-container"></div>
+
     <div class="container">
-        <h2>Weather App</h2>
-        <input type="text" id="city" placeholder="Enter location">
-        <button onclick="getWeather()">Get Weather</button>
+        <div class="search-box">
+            <input type="text" id="city" placeholder="Search for a city...">
+            <button onclick="getWeather()">Search</button>
+        </div>
         
-        <div id="weather-info">
-            <h3 id="location"></h3>
+        <div id="weather-info" class="hidden">
+            <h2 id="location"></h2>
             <p id="description"></p>
-            <p>🌡️ Temperature: <span id="temperature"></span>°C</p>
-            <p>☔ Rain: <span id="rain"></span> mm</p>
-            <p>💧 Humidity: <span id="humidity"></span>%</p>
-            <p>🌬️ Wind Speed: <span id="wind-speed"></span> m/s</p>
-            <p>🔵 Air Pressure: <span id="pressure"></span> hPa</p>
+            <div class="temp-display">
+                <span id="temperature"></span>°
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <small>HUMIDITY</small>
+                    <p><span id="humidity"></span>%</p>
+                </div>
+                <div class="stat-card">
+                    <small>WIND</small>
+                    <p><span id="wind-speed"></span> m/s</p>
+                </div>
+                <div class="stat-card">
+                    <small>RAIN</small>
+                    <p><span id="rain"></span> mm</p>
+                </div>
+                <div class="stat-card">
+                    <small>PRESSURE</small>
+                    <p><span id="pressure"></span> hPa</p>
+                </div>
+            </div>
         </div>
     </div>
 
-<!-- Current Weather -->
-<div id="weather-info"></div>
+    <footer>
+        <p>Computer Science Club Hola Boys 2025</p>
+    </footer>
 
     <script src="script.js"></script>
-    <div id="creator">Enjoy Our Work: Plan For The Day</div>
-
-<!-- Moving Clouds Background -->
-<div class="clouds"></div>
-
-<!-- Rain Effect -->
-<script>
-    function createRain() {
-        for (let i = 0; i < 100; i++) {
-            let rainDrop = document.createElement("div");
-            rainDrop.classList.add("raindrop");
-            rainDrop.style.left = Math.random() * window.innerWidth + "px";
-            rainDrop.style.animationDuration = (Math.random() * 1.5 + 0.5) + "s";
-            document.body.appendChild(rainDrop);
-        }
-    }
-    createRain();
-</script>
-
-
-
 </body>
-<footer>
-    <p> Computer Science Club Hola Boys 2025</p>
-</footer>
-
 </html>
-
