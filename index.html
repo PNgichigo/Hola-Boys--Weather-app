@@ -18,40 +18,37 @@
 
     <div class="container">
         <div class="search-box">
-            <input type="text" id="city" placeholder="Search city (e.g. Hola, Tana River)">
+            <input type="text" id="city" placeholder="Enter city (e.g. Hola)">
             <button onclick="getWeather()">Search</button>
         </div>
         
         <div id="weather-info" class="hidden">
             <h2 id="location"></h2>
             <p id="description"></p>
-            <div class="temp-display">
-                <span id="temperature"></span>°
-            </div>
+            <div class="temp-display"><span id="temperature"></span>°</div>
             
+            <div class="high-low">
+                H: <span id="temp-max"></span>° &nbsp; L: <span id="temp-min"></span>°
+            </div>
+
+            <div class="hourly-section">
+                <h4>Next 12 Hours</h4>
+                <div id="hourly-container"></div>
+            </div>
+
             <div class="stats-grid">
-                <div class="stat-card">
-                    <small>HUMIDITY</small>
-                    <p><span id="humidity"></span>%</p>
-                </div>
-                <div class="stat-card">
-                    <small>WIND</small>
-                    <p><span id="wind-speed"></span> m/s</p>
-                </div>
-                <div class="stat-card">
-                    <small>RAIN (1H)</small>
-                    <p><span id="rain"></span> mm</p>
-                </div>
-                <div class="stat-card">
-                    <small>PRESSURE</small>
-                    <p><span id="pressure"></span> hPa</p>
-                </div>
+                <div class="stat-card"><small>HUMIDITY</small><p><span id="humidity"></span>%</p></div>
+                <div class="stat-card"><small>WIND</small><p><span id="wind-speed"></span> m/s</p></div>
+            </div>
+
+            <div class="forecast-section">
+                <h4>4-Day Forecast</h4>
+                <div id="forecast-container"></div>
             </div>
 
             <div id="activity-guide">
                 <h3>Daily Activity Guide</h3>
-                <div id="activities-list">
-                    </div>
+                <div id="activities-list"></div>
             </div>
         </div>
     </div>
