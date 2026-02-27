@@ -32,7 +32,6 @@ body {
     overflow-y: auto;
 }
 
-/* Hide scrollbar for container */
 .container::-webkit-scrollbar { display: none; }
 
 .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
@@ -52,17 +51,30 @@ button { padding: 0 15px; background: #fff; color: #1e3c72; border: none; border
 
 h4, h3 { font-size: 0.75rem; margin: 0 0 10px 0; opacity: 0.6; text-transform: uppercase; }
 
-#hourly-container, #forecast-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
-}
+#hourly-container, #forecast-container { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 5px; }
+#hourly-container::-webkit-scrollbar, #forecast-container::-webkit-scrollbar { display: none; }
 
 .item-box { text-align: center; min-width: 60px; }
 .item-box p { margin: 5px 0; font-size: 0.8rem; }
 
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 .stat-card { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 15px; }
+
+/* Activity List Styling with Scroll */
+#activities-list {
+    max-height: 140px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+#activities-list p {
+    margin: 8px 0;
+    padding-bottom: 8px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+#activities-list p:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+#activities-list::-webkit-scrollbar { width: 4px; }
+#activities-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
 
 #loading-screen {
     position: fixed; inset: 0; background: #000; z-index: 1000;
