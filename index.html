@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App | Hola Boys</title>
+    <title>Weather App | Hola Boys 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
 
     <div class="container">
         <div class="search-box">
-            <input type="text" id="city" placeholder="Search for a city...">
+            <input type="text" id="city" placeholder="Search city (e.g. Hola, Tana River)">
             <button onclick="getWeather()">Search</button>
         </div>
         
@@ -39,7 +39,7 @@
                     <p><span id="wind-speed"></span> m/s</p>
                 </div>
                 <div class="stat-card">
-                    <small>RAIN</small>
+                    <small>RAIN (1H)</small>
                     <p><span id="rain"></span> mm</p>
                 </div>
                 <div class="stat-card">
@@ -47,11 +47,17 @@
                     <p><span id="pressure"></span> hPa</p>
                 </div>
             </div>
+
+            <div id="activity-guide">
+                <h3>Daily Activity Guide</h3>
+                <div id="activities-list">
+                    </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>Computer Science Club Hola Boys 2025</p>
+        <p>Computer Science Club Hola Boys 2026</p>
     </footer>
 
     <script src="script.js"></script>
