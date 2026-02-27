@@ -5,7 +5,8 @@ function getWeather() {
     let city = document.getElementById("city").value;
     if (city === "") return alert("Please enter a city!");
 
-    fetch(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`)
+    // Adding ",KE" helps the API find Kenyan locations like Hola or Nanyuki first
+    fetch(`${BASE_URL}?q=${city},KE&appid=${API_KEY}&units=metric`)
         .then(res => res.json())
         .then(data => {
             if (data.cod !== 200) return alert("City not found!");
@@ -13,10 +14,10 @@ function getWeather() {
             const info = document.getElementById("weather-info");
             info.classList.remove("hidden");
             
-            // Rounding and Updating Basic Stats
-            document.getElementById("location").innerText = data.name;
+            // Updating Basic Stats
+            document.getElementById("location").innerText = data.name + ", " + data.sys.country;
             document.getElementById("temperature").innerText = Math.round(data.main.temp);
-            document.getElementById("description").innerText = data.weather[0].description;
+            document.getElementById("description").innerText = data.weather[0].description.toUpperCase();
             document.getElementById("humidity").innerText = data.main.humidity;
             document.getElementById("wind-speed").innerText = data.wind.speed;
             document.getElementById("pressure").innerText = data.main.pressure;
@@ -29,27 +30,24 @@ function getWeather() {
             const wind = data.wind.speed;
             let advice = "";
 
-            // Sports/Soccer Logic
             if (rain > 0.2) {
-                advice += "⚽ <b>Sports:</b> Pitch is wet. Use caution.<br>";
+                advice += "⚽ <b>Sports:</b> Pitch is wet. Watch for sliding.<br>";
             } else if (temp > 32) {
-                advice += "⚽ <b>Sports:</b> Very hot. Reduce training intensity.<br>";
+                advice += "⚽ <b>Sports:</b> Extreme heat. Water breaks every 15 mins.<br>";
             } else {
-                advice += "⚽ <b>Sports:</b> Great weather for a match!<br>";
+                advice += "⚽ <b>Sports:</b> Perfect for soccer practice!<br>";
             }
 
-            // Field Work/Running
             if (temp < 20) {
-                advice += "🏃 <b>Running:</b> Cool air. Perfect for long runs.<br>";
+                advice += "🏃 <b>Running:</b> Great cool weather for a long run.<br>";
             } else {
-                advice += "🏃 <b>Running:</b> Warm. Stay hydrated.<br>";
+                advice += "🏃 <b>Running:</b> It's warm. Take it easy.<br>";
             }
 
-            // Travel/Field Work
-            if (rain > 5 || wind > 18) {
-                advice += "🚗 <b>Travel:</b> Warning! Low visibility/high wind.<br>";
+            if (rain > 2) {
+                advice += "🚜 <b>Field Work:</b> Good moisture for the soil.<br>";
             } else {
-                advice += "🚜 <b>Field Work:</b> Conditions are clear for work.<br>";
+                advice += "🚗 <b>Travel:</b> Clear roads. Safe journey.<br>";
             }
 
             document.getElementById("activities-list").innerHTML = advice;
@@ -57,7 +55,6 @@ function getWeather() {
         .catch(() => alert("Error connecting to weather service."));
 }
 
-// Background Rain Effect
 function createRain() {
     const container = document.getElementById("rain-container");
     for (let i = 0; i < 40; i++) {
@@ -71,7 +68,7 @@ function createRain() {
 }
 createRain();
 
-// Hide loading screen helper
 setTimeout(() => {
-    document.getElementById("loading-screen").style.display = "none";
-}, 4500);
+    document.getElementById("loading-screen").style.opacity = "0";
+    setTimeout(() => { document.getElementById("loading-screen").style.display = "none"; }, 500);
+}, 3000);
