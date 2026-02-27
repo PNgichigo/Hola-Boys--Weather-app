@@ -1,48 +1,36 @@
-// Hide the loading screen after 5 seconds
-setTimeout(() => {
-    let loadingScreen = document.getElementById("loading-screen");
-    loadingScreen.style.display = "none"; // Hides the loading screen
-}, 5000);
-
-// OpenWeatherMap API Key (Replace with your API Key)
 const API_KEY = "52ff60c7ca7393ce1fd235caf4dba867";
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
-// Function to fetch weather data
 function getWeather() {
     let city = document.getElementById("city").value;
-    
-    if (city === "") {
-        alert("Please enter a city name!");
-        return;
-    }
+    if (city === "") return alert("Please enter a city!");
 
-    let url = `${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`;
-
-    fetch(url)
-        .then(response => response.json())
+    fetch(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`)
+        .then(res => res.json())
         .then(data => {
-            if (data.cod !== 200) {
-                alert("City not found! Please try again.");
-                return;
-            }
+            if (data.cod !== 200) return alert("City not found!");
 
-            document.getElementById("location").innerText = data.name + ", " + data.sys.country;
-            document.getElementById("temperature").innerText = data.main.temp;
+            document.getElementById("weather-info").classList.remove("hidden");
+            document.getElementById("location").innerText = data.name;
+            document.getElementById("temperature").innerText = Math.round(data.main.temp);
             document.getElementById("humidity").innerText = data.main.humidity;
             document.getElementById("wind-speed").innerText = data.wind.speed;
             document.getElementById("pressure").innerText = data.main.pressure;
-
-            // Check if it has rain data
-            let rainVolume = data.rain ? data.rain["1h"] : 0;
-            document.getElementById("rain").innerText = rainVolume;
-
-            document.getElementById("description").innerText = data.weather[0].description.toUpperCase();
+            document.getElementById("description").innerText = data.weather[0].description;
+            document.getElementById("rain").innerText = data.rain ? data.rain["1h"] || 0 : 0;
         })
-        .catch(error => {
-            console.error("Error fetching weather data:", error);
-            alert("Error fetching weather data. Please try again.");
-        });
+        .catch(() => alert("Error connecting to weather service."));
 }
 
-
+function createRain() {
+    const container = document.getElementById("rain-container");
+    for (let i = 0; i < 50; i++) {
+        let drop = document.createElement("div");
+        drop.className = "raindrop";
+        drop.style.left = Math.random() * 100 + "vw";
+        drop.style.animationDuration = (Math.random() * 1 + 0.5) + "s";
+        drop.style.animationDelay = Math.random() * 2 + "s";
+        container.appendChild(drop);
+    }
+}
+createRain();
