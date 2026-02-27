@@ -4,7 +4,6 @@ function getWeather() {
     let city = document.getElementById("city").value;
     if (city === "") return alert("Please enter a city!");
 
-    // Search specifically in Kenya to fix the "5 degrees" issue
     const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},KE&appid=${API_KEY}&units=metric`;
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},KE&appid=${API_KEY}&units=metric`;
 
@@ -23,7 +22,9 @@ function getWeather() {
             document.getElementById("humidity").innerText = data.main.humidity;
             document.getElementById("wind-speed").innerText = data.wind.speed;
 
-            updateGuide(data.main.temp, data.rain ? data.rain['1h'] : 0);
+            let rainAmt = data.rain ? data.rain['1h'] : 0;
+            // Pass temp, rain, and wind to the new guide function
+            updateGuide(data.main.temp, rainAmt, data.wind.speed);
         });
 
     // Fetch Forecast Data
@@ -38,7 +39,7 @@ function getWeather() {
 function renderHourly(list) {
     const container = document.getElementById("hourly-container");
     container.innerHTML = "";
-    for (let i = 0; i < 4; i++) { // Next 12 hours
+    for (let i = 0; i < 4; i++) {
         const item = list[i];
         const time = new Date(item.dt * 1000).getHours() + ":00";
         container.innerHTML += `
@@ -53,7 +54,7 @@ function renderHourly(list) {
 function renderDaily(list) {
     const container = document.getElementById("forecast-container");
     container.innerHTML = "";
-    for (let i = 8; i < list.length; i += 8) { // One per day
+    for (let i = 8; i < list.length; i += 8) {
         const item = list[i];
         const date = new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' });
         container.innerHTML += `
@@ -65,10 +66,40 @@ function renderDaily(list) {
     }
 }
 
-function updateGuide(temp, rain) {
-    let advice = temp > 32 ? "⚽ Soccer: Dangerous heat. Train in shade." : "⚽ Soccer: Good for practice!";
-    if (rain > 0.5) advice = "⚽ Soccer: Slippery pitch. Focus on drills.";
-    document.getElementById("activities-list").innerHTML = advice;
+function updateGuide(temp, rain, wind) {
+    let adviceHTML = "";
+
+    // Soccer
+    if (rain > 0.5) adviceHTML += "<p>⚽ <b>Soccer:</b> Slippery pitch. Focus on drills.</p>";
+    else if (temp > 32) adviceHTML += "<p>⚽ <b>Soccer:</b> Dangerous heat. Train in shade.</p>";
+    else adviceHTML += "<p>⚽ <b>Soccer:</b> Perfect for practice!</p>";
+
+    // Camping
+    if (rain > 0) adviceHTML += "<p>⛺ <b>Camping:</b> Wet conditions. Ensure your tent is waterproof.</p>";
+    else if (temp < 15) adviceHTML += "<p>⛺ <b>Camping:</b> Chilly night ahead. Pack extra blankets.</p>";
+    else adviceHTML += "<p>⛺ <b>Camping:</b> Great clear weather for pitching a tent.</p>";
+
+    // Hiking
+    if (rain > 0) adviceHTML += "<p>🥾 <b>Hiking:</b> Trails will be muddy and slippery.</p>";
+    else if (temp > 30) adviceHTML += "<p>🥾 <b>Hiking:</b> Very hot. Carry extra water and go early.</p>";
+    else adviceHTML += "<p>🥾 <b>Hiking:</b> Excellent trail conditions!</p>";
+
+    // Golf
+    if (rain > 0) adviceHTML += "<p>⛳ <b>Golf:</b> Greens are wet. Play might be slow.</p>";
+    else if (wind > 8) adviceHTML += "<p>⛳ <b>Golf:</b> Windy! You'll need to adjust your swings.</p>";
+    else adviceHTML += "<p>⛳ <b>Golf:</b> Perfect day for a full 18 holes.</p>";
+
+    // Cycling
+    if (rain > 0) adviceHTML += "<p>🚴 <b>Cycling:</b> Roads are slick. Ride with caution.</p>";
+    else if (wind > 10) adviceHTML += "<p>🚴 <b>Cycling:</b> Tough headwinds expected today.</p>";
+    else adviceHTML += "<p>🚴 <b>Cycling:</b> Great day for a long ride.</p>";
+
+    // Gardening
+    if (rain > 1) adviceHTML += "<p>🌱 <b>Gardening:</b> Nature is doing the watering today!</p>";
+    else if (temp > 30) adviceHTML += "<p>🌱 <b>Gardening:</b> Water plants early morning or late evening.</p>";
+    else adviceHTML += "<p>🌱 <b>Gardening:</b> Excellent weather to be out in the garden.</p>";
+
+    document.getElementById("activities-list").innerHTML = adviceHTML;
 }
 
 // Background Rain
