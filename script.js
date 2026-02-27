@@ -1,74 +1,85 @@
 const API_KEY = "52ff60c7ca7393ce1fd235caf4dba867";
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 function getWeather() {
     let city = document.getElementById("city").value;
     if (city === "") return alert("Please enter a city!");
 
-    // Adding ",KE" helps the API find Kenyan locations like Hola or Nanyuki first
-    fetch(`${BASE_URL}?q=${city},KE&appid=${API_KEY}&units=metric`)
+    // Search specifically in Kenya to fix the "5 degrees" issue
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},KE&appid=${API_KEY}&units=metric`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},KE&appid=${API_KEY}&units=metric`;
+
+    // Fetch Current Data
+    fetch(currentUrl)
         .then(res => res.json())
         .then(data => {
-            if (data.cod !== 200) return alert("City not found!");
-
-            const info = document.getElementById("weather-info");
-            info.classList.remove("hidden");
+            if (data.cod !== 200) return alert("City not found in Kenya. Try adding ',KE'");
             
-            // Updating Basic Stats
-            document.getElementById("location").innerText = data.name + ", " + data.sys.country;
+            document.getElementById("weather-info").classList.remove("hidden");
+            document.getElementById("location").innerText = data.name;
             document.getElementById("temperature").innerText = Math.round(data.main.temp);
-            document.getElementById("description").innerText = data.weather[0].description.toUpperCase();
+            document.getElementById("temp-max").innerText = Math.round(data.main.temp_max);
+            document.getElementById("temp-min").innerText = Math.round(data.main.temp_min);
+            document.getElementById("description").innerText = data.weather[0].description;
             document.getElementById("humidity").innerText = data.main.humidity;
             document.getElementById("wind-speed").innerText = data.wind.speed;
-            document.getElementById("pressure").innerText = data.main.pressure;
-            
-            const rain = data.rain ? (data.rain["1h"] || 0) : 0;
-            document.getElementById("rain").innerText = rain;
 
-            // Activity Guide Logic
-            const temp = Math.round(data.main.temp);
-            const wind = data.wind.speed;
-            let advice = "";
+            updateGuide(data.main.temp, data.rain ? data.rain['1h'] : 0);
+        });
 
-            if (rain > 0.2) {
-                advice += "⚽ <b>Sports:</b> Pitch is wet. Watch for sliding.<br>";
-            } else if (temp > 32) {
-                advice += "⚽ <b>Sports:</b> Extreme heat. Water breaks every 15 mins.<br>";
-            } else {
-                advice += "⚽ <b>Sports:</b> Perfect for soccer practice!<br>";
-            }
-
-            if (temp < 20) {
-                advice += "🏃 <b>Running:</b> Great cool weather for a long run.<br>";
-            } else {
-                advice += "🏃 <b>Running:</b> It's warm. Take it easy.<br>";
-            }
-
-            if (rain > 2) {
-                advice += "🚜 <b>Field Work:</b> Good moisture for the soil.<br>";
-            } else {
-                advice += "🚗 <b>Travel:</b> Clear roads. Safe journey.<br>";
-            }
-
-            document.getElementById("activities-list").innerHTML = advice;
-        })
-        .catch(() => alert("Error connecting to weather service."));
+    // Fetch Forecast Data
+    fetch(forecastUrl)
+        .then(res => res.json())
+        .then(data => {
+            renderHourly(data.list);
+            renderDaily(data.list);
+        });
 }
 
+function renderHourly(list) {
+    const container = document.getElementById("hourly-container");
+    container.innerHTML = "";
+    for (let i = 0; i < 4; i++) { // Next 12 hours
+        const item = list[i];
+        const time = new Date(item.dt * 1000).getHours() + ":00";
+        container.innerHTML += `
+            <div class="item-box">
+                <p>${time}</p>
+                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" width="30">
+                <p><b>${Math.round(item.main.temp)}°</b></p>
+            </div>`;
+    }
+}
+
+function renderDaily(list) {
+    const container = document.getElementById("forecast-container");
+    container.innerHTML = "";
+    for (let i = 8; i < list.length; i += 8) { // One per day
+        const item = list[i];
+        const date = new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' });
+        container.innerHTML += `
+            <div class="item-box">
+                <p>${date}</p>
+                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png" width="30">
+                <p><b>${Math.round(item.main.temp)}°</b></p>
+            </div>`;
+    }
+}
+
+function updateGuide(temp, rain) {
+    let advice = temp > 32 ? "⚽ Soccer: Dangerous heat. Train in shade." : "⚽ Soccer: Good for practice!";
+    if (rain > 0.5) advice = "⚽ Soccer: Slippery pitch. Focus on drills.";
+    document.getElementById("activities-list").innerHTML = advice;
+}
+
+// Background Rain
 function createRain() {
     const container = document.getElementById("rain-container");
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
         let drop = document.createElement("div");
         drop.className = "raindrop";
         drop.style.left = Math.random() * 100 + "vw";
-        drop.style.animationDuration = (Math.random() * 0.8 + 0.5) + "s";
-        drop.style.animationDelay = Math.random() * 2 + "s";
+        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + "s";
         container.appendChild(drop);
     }
 }
 createRain();
-
-setTimeout(() => {
-    document.getElementById("loading-screen").style.opacity = "0";
-    setTimeout(() => { document.getElementById("loading-screen").style.display = "none"; }, 500);
-}, 3000);
