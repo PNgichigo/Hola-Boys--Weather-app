@@ -1,10 +1,10 @@
 :root {
-    --glass: rgba(255, 255, 255, 0.2);
-    --border: rgba(255, 255, 255, 0.3);
+    --glass: rgba(255, 255, 255, 0.15);
+    --border: rgba(255, 255, 255, 0.2);
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     height: 100vh;
     display: flex;
@@ -15,71 +15,82 @@ body {
     overflow: hidden;
 }
 
-/* Glass Container */
+/* Glass Card */
 .container {
     position: relative;
     z-index: 10;
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     background: var(--glass);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border);
     border-radius: 30px;
-    padding: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     text-align: center;
 }
 
 .search-box {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 8px;
+    margin-bottom: 25px;
 }
 
 input {
     flex: 1;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 14px;
+    border-radius: 14px;
     border: none;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     color: white;
-    outline: none;
+    font-size: 1rem;
 }
 
-input::placeholder { color: rgba(255, 255, 255, 0.7); }
-
 button {
-    padding: 10px 20px;
+    padding: 0 20px;
     background: #fff;
     color: #1e3c72;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-weight: bold;
     cursor: pointer;
 }
 
-/* Weather Typography */
-#location { font-size: 1.8rem; margin-bottom: 5px; font-weight: 500; }
-#description { font-size: 1.1rem; opacity: 0.8; margin-top: 0; }
-.temp-display { font-size: 5rem; font-weight: 200; margin: 20px 0; }
+/* Weather UI */
+#location { font-size: 2rem; margin: 0; font-weight: 500; }
+#description { font-size: 1rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+.temp-display { font-size: 6rem; font-weight: 200; margin: 15px 0; }
 
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 12px;
 }
 
 .stat-card {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 20px;
+    text-align: center;
 }
 
-.stat-card small { font-size: 0.7rem; opacity: 0.6; display: block; margin-bottom: 5px; }
+.stat-card small { font-size: 0.65rem; opacity: 0.6; display: block; margin-bottom: 5px; }
+.stat-card p { margin: 0; font-weight: 600; font-size: 1.1rem; }
 
-/* Loading & Backgrounds */
+/* Activity Guide */
+#activity-guide {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 15px;
+    text-align: left;
+}
+
+#activity-guide h3 { font-size: 0.8rem; margin: 0 0 10px 0; opacity: 0.6; text-transform: uppercase; }
+#activities-list { font-size: 0.9rem; line-height: 1.5; }
+
+/* Backgrounds */
 #loading-screen {
     position: fixed;
     inset: 0;
@@ -89,37 +100,37 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    animation: fadeOut 2s ease forwards 3s;
+    animation: fadeOut 2s ease forwards 2.5s;
 }
 
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-
 .hidden { display: none; }
 
-/* Cloud Animation */
 .clouds {
     position: fixed;
-    top: 5%;
+    top: 0;
     width: 200%;
     height: 300px;
     background: url('https://pngimg.com/uploads/cloud/cloud_PNG14.png') repeat-x;
     background-size: contain;
-    animation: moveClouds 40s linear infinite;
-    opacity: 0.3;
+    animation: moveClouds 60s linear infinite;
+    opacity: 0.15;
     z-index: 1;
+    pointer-events: none;
 }
 
 @keyframes moveClouds { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 .raindrop {
     position: fixed;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
     width: 1px;
-    height: 20px;
+    height: 40px;
     z-index: 2;
+    pointer-events: none;
     animation: fall linear infinite;
 }
 
-@keyframes fall { to { transform: translateY(100vh); } }
+@keyframes fall { to { transform: translateY(110vh); } }
 
-footer { position: fixed; bottom: 20px; font-size: 0.8rem; opacity: 0.5; width: 100%; text-align: center; }
+footer { position: fixed; bottom: 15px; font-size: 0.75rem; opacity: 0.5; width: 100%; text-align: center; z-index: 5; }
