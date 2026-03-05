@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="description" content="The official daily weather and activity planner built by the Computer Science Club at Hola Boys School. Get hourly forecasts, sports conditions, and daily activity guides.">
+    <meta name="keywords" content="Hola Boys School, weather app, Tana River weather, Kenya weather forecast, soccer weather conditions, daily activity planner">
+    <meta name="author" content="Omar Madhunde, Hamisi Ali">
+    
     <title>Weather App | Hola Boys 2026</title>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,15 +20,15 @@
     </div>
 
     <div class="clouds"></div>
-    <div id="rain-container"></div>
-
-    <div class="container">
+    <div id="rain-container"></div> <div class="container">
+        
         <div class="search-box">
             <input type="text" id="city" placeholder="Enter city (e.g. Hola)">
-            <button onclick="getWeather()">Search</button>
+            <button onclick="getWeather()">Search</button> 
         </div>
         
         <div id="weather-info" class="hidden">
+            
             <h2 id="location"></h2>
             <p id="description"></p>
             <div class="temp-display"><span id="temperature"></span>°</div>
@@ -33,8 +39,7 @@
 
             <div class="hourly-section">
                 <h4>Hourly Forecast</h4>
-                <div id="hourly-container"></div>
-            </div>
+                <div id="hourly-container"></div> </div>
 
             <div class="stats-grid">
                 <div class="stat-card"><small>HUMIDITY</small><p><span id="humidity"></span>%</p></div>
@@ -43,13 +48,12 @@
 
             <div class="forecast-section">
                 <h4>4-Day Forecast</h4>
-                <div id="forecast-container"></div>
-            </div>
+                <div id="forecast-container"></div> </div>
 
             <div id="activity-guide">
                 <h3>Daily Activity Guide</h3>
-                <div id="activities-list"></div>
-            </div>
+                <div id="activities-list"></div> </div>
+            
         </div>
     </div>
 
