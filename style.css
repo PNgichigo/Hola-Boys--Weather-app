@@ -94,8 +94,8 @@ h4, h3 { font-size: 0.75rem; margin: 0 0 10px 0; opacity: 0.6; text-transform: u
 .item-box p { margin: 4px 0; font-size: 0.85rem; }
 .item-box img { width: 45px; height: 45px; margin: 2px 0; } /* Weather icons */
 
-/* --- Grid for Humidity and Wind Stats --- */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+/* --- Grid for Humidity, Weather, and Wind Stats --- */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
 .stat-card { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 15px; }
 
 /* --- Custom Scrollbar for the Activity List --- */
@@ -140,3 +140,4 @@ h4, h3 { font-size: 0.75rem; margin: 0 0 10px 0; opacity: 0.6; text-transform: u
 
 /* Footer styling */
 footer { position: fixed; bottom: 10px; font-size: 0.7rem; opacity: 0.5; width: 100%; text-align: center; }
+
