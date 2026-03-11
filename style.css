@@ -89,15 +89,16 @@ h4, h3 { font-size: 0.75rem; margin: 0 0 10px 0; opacity: 0.6; text-transform: u
 .item-box p { margin: 4px 0; font-size: 0.85rem; }
 .item-box img { width: 45px; height: 45px; margin: 2px 0; } 
 
-/* --- UPDATED: Grid layout centered for a single Weather Stat card --- */
+/* --- RESTORED: Grid layout for the 3 cards --- */
 .stats-grid { 
-    display: flex; 
-    justify-content: center; 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 10px; 
     margin-top: 15px; 
 }
 .stat-card { 
     background: rgba(255, 255, 255, 0.05); 
-    padding: 10px 40px; 
+    padding: 10px; 
     border-radius: 15px; 
 }
 
