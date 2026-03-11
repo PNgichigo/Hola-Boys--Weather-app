@@ -31,6 +31,10 @@ function getWeather() {
             document.getElementById("temp-min").innerText = Math.round(data.main.temp_min);
             document.getElementById("description").innerText = data.weather[0].description;
             document.getElementById("humidity").innerText = data.main.humidity;
+            
+            // NEW ADDITION: Injects the main weather condition (e.g., Rain, Clouds, Clear) into the new middle card
+            document.getElementById("weather-condition").innerText = data.weather[0].main;
+            
             document.getElementById("wind-speed").innerText = data.wind.speed;
 
             // Check if it's raining (the API only sends 'rain' data if it is actually raining)
@@ -117,31 +121,5 @@ function updateGuide(temp, rain, wind) {
     else if (wind > 8) adviceHTML += "<p>⛳ <b>Golf:</b> Windy! You'll need to adjust your swings.</p>";
     else adviceHTML += "<p>⛳ <b>Golf:</b> Perfect day for a full 18 holes.</p>";
 
-    if (rain > 0) adviceHTML += "<p>🚴 <b>Cycling:</b> Roads are slick. Ride with caution.</p>";
-    else if (wind > 10) adviceHTML += "<p>🚴 <b>Cycling:</b> Tough headwinds expected today.</p>";
-    else adviceHTML += "<p>🚴 <b>Cycling:</b> Great day for a long ride.</p>";
-
-    if (rain > 1) adviceHTML += "<p>🌱 <b>Gardening:</b> Nature is doing the watering today!</p>";
-    else if (temp > 30) adviceHTML += "<p>🌱 <b>Gardening:</b> Water plants early morning or late evening.</p>";
-    else adviceHTML += "<p>🌱 <b>Gardening:</b> Excellent weather to be out in the garden.</p>";
-
-    // Inject the final list of advice into the HTML document
-    document.getElementById("activities-list").innerHTML = adviceHTML;
-}
-
-// Background effect generator
-function createRain() {
-    const container = document.getElementById("rain-container");
-    
-    // Generates 30 individual raindrops with random positions and fall speeds
-    for (let i = 0; i < 30; i++) {
-        let drop = document.createElement("div");
-        drop.className = "raindrop";
-        drop.style.left = Math.random() * 100 + "vw"; // Random horizontal position across the screen width
-        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + "s"; // Random fall speed between 0.5s and 1.0s
-        container.appendChild(drop);
-    }
-}
-
-// Starts the rain animation as soon as the JavaScript file loads
-createRain();
+    if (rain > 0) adviceHTML += "<p>🚴 <b>Cycling
+        
