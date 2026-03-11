@@ -121,5 +121,12 @@ function updateGuide(temp, rain, wind) {
     else if (wind > 8) adviceHTML += "<p>⛳ <b>Golf:</b> Windy! You'll need to adjust your swings.</p>";
     else adviceHTML += "<p>⛳ <b>Golf:</b> Perfect day for a full 18 holes.</p>";
 
-    if (rain > 0) adviceHTML += "<p>🚴 <b>Cycling
-        
+    // FIXED: The cycling block is now complete
+    if (rain > 0) adviceHTML += "<p>🚴 <b>Cycling:</b> Wet roads. Reduce speed and brake early.</p>";
+    else if (wind > 10) adviceHTML += "<p>🚴 <b>Cycling:</b> Strong headwinds. Expect a tough ride.</p>";
+    else adviceHTML += "<p>🚴 <b>Cycling:</b> Great conditions for a ride!</p>";
+
+    // FIXED: Render the advice list to the HTML container
+    document.getElementById("activities-list").innerHTML = adviceHTML;
+                    }
+
