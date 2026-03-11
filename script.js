@@ -27,7 +27,11 @@ function getWeather() {
             document.getElementById("temp-min").innerText = Math.round(data.main.temp_min);
             document.getElementById("description").innerText = data.weather[0].description;
             
-            // --- NEW: Convert API noun terms to adjectives ---
+            // RESTORED: Reconnected the Humidity and Wind stats to the HTML
+            document.getElementById("humidity").innerText = data.main.humidity;
+            document.getElementById("wind-speed").innerText = data.wind.speed;
+            
+            // Convert API noun terms to adjectives (Clouds -> Cloudy)
             const weatherTerms = {
                 "Clouds": "Cloudy",
                 "Clear": "Sunny",
@@ -45,7 +49,7 @@ function getWeather() {
             
             document.getElementById("weather-condition").innerText = displayCondition;
 
-            // Note: Wind and rain data is still retrieved to calculate the Activity Guide
+            // Send data to the Activity Guide
             let rainAmt = data.rain ? data.rain['1h'] : 0;
             updateGuide(data.main.temp, rainAmt, data.wind.speed);
         })
