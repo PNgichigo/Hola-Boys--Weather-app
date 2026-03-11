@@ -8,68 +8,59 @@ function getWeather() {
     // Stop the code if the user didn't type anything
     if (city === "") return alert("Please enter a city!");
 
-    // We use two different API endpoints: one for right now, one for the future forecasts
-    // Adding ',KE' forces the search to look in Kenya first (fixing the cold temperature bug)
     const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},KE&appid=${API_KEY}&units=metric`;
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},KE&appid=${API_KEY}&units=metric`;
 
     // --- 1. Fetch the CURRENT Weather ---
     fetch(currentUrl)
-        .then(res => res.json()) // Convert the response to JSON data
+        .then(res => res.json())
         .then(data => {
-            // Error handling if the city doesn't exist
-            if (data.cod !== 200) return alert("City not found in Kenya. Try adding ',KE'");
+            // Safety check: Make sure OpenWeather actually found the city
+            if (data.cod != 200) {
+                return alert("City not found or API error. Try adding ',KE' to the city name.");
+            }
             
-            // Un-hide the weather card now that we have data
             document.getElementById("weather-info").classList.remove("hidden");
             
-            // Map the API data to the HTML elements
-            // Math.round() removes the ugly decimals (e.g., turns 24.32 into 24)
             document.getElementById("location").innerText = data.name;
             document.getElementById("temperature").innerText = Math.round(data.main.temp);
             document.getElementById("temp-max").innerText = Math.round(data.main.temp_max);
             document.getElementById("temp-min").innerText = Math.round(data.main.temp_min);
             document.getElementById("description").innerText = data.weather[0].description;
             document.getElementById("humidity").innerText = data.main.humidity;
-            
-            // NEW ADDITION: Injects the main weather condition (e.g., Rain, Clouds, Clear) into the new middle card
             document.getElementById("weather-condition").innerText = data.weather[0].main;
-            
             document.getElementById("wind-speed").innerText = data.wind.speed;
 
-            // Check if it's raining (the API only sends 'rain' data if it is actually raining)
             let rainAmt = data.rain ? data.rain['1h'] : 0;
-            
-            // Send the data to our custom Activity Guide logic
             updateGuide(data.main.temp, rainAmt, data.wind.speed);
-        });
+        })
+        .catch(err => alert("Network error. Please check your internet connection."));
 
     // --- 2. Fetch the FORECAST Weather (Hourly and Daily) ---
     fetch(forecastUrl)
         .then(res => res.json())
         .then(data => {
-            // Pass the giant list of forecast data to our render functions
+            // Safety check: Prevent crashing if the API didn't return a forecast list
+            if (!data.list) return; 
             renderHourly(data.list);
             renderDaily(data.list);
-        });
+        })
+        .catch(err => console.error("Forecast failed to load."));
 }
 
 // Function to draw the Next 24 Hours timeline
 function renderHourly(list) {
     const container = document.getElementById("hourly-container");
-    container.innerHTML = ""; // Clear out old data
+    container.innerHTML = ""; 
     
-    // Loop through the first 8 items in the list (The API provides data every 3 hours. 8 * 3 = 24 hours)
     for (let i = 0; i < 8; i++) {
         const item = list[i];
+        if (!item) continue; // Extra safety check
         
-        // Convert the UNIX timestamp into a readable 24-hour time format (e.g., "15:00")
         let dateObj = new Date(item.dt * 1000);
         let hours = dateObj.getHours().toString().padStart(2, '0');
         let timeString = `${hours}:00`;
 
-        // Create the HTML for each individual hour block and add it to the container
-        // Note: @2x.png requests higher resolution icons from OpenWeatherMap
         container.innerHTML += `
             <div class="item-box">
                 <p>${timeString}</p>
@@ -84,11 +75,10 @@ function renderDaily(list) {
     const container = document.getElementById("forecast-container");
     container.innerHTML = "";
     
-    // We skip 8 items at a time so we only get one forecast reading per day (since 8 items = 24 hours)
     for (let i = 8; i < list.length; i += 8) {
         const item = list[i];
+        if (!item) continue; // Extra safety check
         
-        // Get the short name of the weekday (e.g., "Mon", "Tue")
         const date = new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' });
         
         container.innerHTML += `
@@ -104,7 +94,6 @@ function renderDaily(list) {
 function updateGuide(temp, rain, wind) {
     let adviceHTML = "";
 
-    // If/Else statements checking conditions and adding advice to the list
     if (rain > 0.5) adviceHTML += "<p>⚽ <b>Soccer:</b> Slippery pitch. Focus on drills.</p>";
     else if (temp > 32) adviceHTML += "<p>⚽ <b>Soccer:</b> Dangerous heat. Train in shade.</p>";
     else adviceHTML += "<p>⚽ <b>Soccer:</b> Perfect for practice!</p>";
@@ -121,12 +110,10 @@ function updateGuide(temp, rain, wind) {
     else if (wind > 8) adviceHTML += "<p>⛳ <b>Golf:</b> Windy! You'll need to adjust your swings.</p>";
     else adviceHTML += "<p>⛳ <b>Golf:</b> Perfect day for a full 18 holes.</p>";
 
-    // FIXED: The cycling block is now complete
     if (rain > 0) adviceHTML += "<p>🚴 <b>Cycling:</b> Wet roads. Reduce speed and brake early.</p>";
     else if (wind > 10) adviceHTML += "<p>🚴 <b>Cycling:</b> Strong headwinds. Expect a tough ride.</p>";
     else adviceHTML += "<p>🚴 <b>Cycling:</b> Great conditions for a ride!</p>";
 
-    // FIXED: Render the advice list to the HTML container
     document.getElementById("activities-list").innerHTML = adviceHTML;
-                    }
+}
 
