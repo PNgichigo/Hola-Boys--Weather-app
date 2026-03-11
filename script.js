@@ -15,7 +15,6 @@ function getWeather() {
     fetch(currentUrl)
         .then(res => res.json())
         .then(data => {
-            // Safety check: Make sure OpenWeather actually found the city
             if (data.cod != 200) {
                 return alert("City not found or API error. Try adding ',KE' to the city name.");
             }
@@ -27,10 +26,26 @@ function getWeather() {
             document.getElementById("temp-max").innerText = Math.round(data.main.temp_max);
             document.getElementById("temp-min").innerText = Math.round(data.main.temp_min);
             document.getElementById("description").innerText = data.weather[0].description;
-            document.getElementById("humidity").innerText = data.main.humidity;
-            document.getElementById("weather-condition").innerText = data.weather[0].main;
-            document.getElementById("wind-speed").innerText = data.wind.speed;
+            
+            // --- NEW: Convert API noun terms to adjectives ---
+            const weatherTerms = {
+                "Clouds": "Cloudy",
+                "Clear": "Sunny",
+                "Rain": "Rainy",
+                "Drizzle": "Drizzly",
+                "Snow": "Snowy",
+                "Thunderstorm": "Stormy",
+                "Mist": "Misty",
+                "Fog": "Foggy",
+                "Haze": "Hazy"
+            };
+            
+            let rawCondition = data.weather[0].main;
+            let displayCondition = weatherTerms[rawCondition] || rawCondition; 
+            
+            document.getElementById("weather-condition").innerText = displayCondition;
 
+            // Note: Wind and rain data is still retrieved to calculate the Activity Guide
             let rainAmt = data.rain ? data.rain['1h'] : 0;
             updateGuide(data.main.temp, rainAmt, data.wind.speed);
         })
@@ -40,7 +55,6 @@ function getWeather() {
     fetch(forecastUrl)
         .then(res => res.json())
         .then(data => {
-            // Safety check: Prevent crashing if the API didn't return a forecast list
             if (!data.list) return; 
             renderHourly(data.list);
             renderDaily(data.list);
@@ -55,7 +69,7 @@ function renderHourly(list) {
     
     for (let i = 0; i < 8; i++) {
         const item = list[i];
-        if (!item) continue; // Extra safety check
+        if (!item) continue; 
         
         let dateObj = new Date(item.dt * 1000);
         let hours = dateObj.getHours().toString().padStart(2, '0');
@@ -77,7 +91,7 @@ function renderDaily(list) {
     
     for (let i = 8; i < list.length; i += 8) {
         const item = list[i];
-        if (!item) continue; // Extra safety check
+        if (!item) continue; 
         
         const date = new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' });
         
@@ -116,4 +130,3 @@ function updateGuide(temp, rain, wind) {
 
     document.getElementById("activities-list").innerHTML = adviceHTML;
 }
-
